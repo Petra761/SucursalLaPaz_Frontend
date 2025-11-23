@@ -3,7 +3,8 @@ import type {
   CreateRequestPayload,
 } from "../types/request.types.ts";
 
-const API_URL = "https://localhost:7193/api/Solicitudes";
+const API_URL =
+  "https://sucursallapazbackend-production.up.railway.app/api/Solicitudes";
 
 export const getRequests = async (): Promise<RequestBackend[]> => {
   try {
