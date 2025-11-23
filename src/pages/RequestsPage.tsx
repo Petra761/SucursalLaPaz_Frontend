@@ -5,20 +5,21 @@ import { CreateRequestModal } from "../components/organisms/CreateRequestModal";
 import { RequestDetailModal } from "../components/organisms/RequestDetailModal";
 import { ToastNotification } from "../components/atoms/ToastNotification";
 import { useRequests } from "../hooks/useRequests";
-import type { RequestFrontend } from "../types/request.types";
-import { deleteRequest } from "../services/request.service";
+import { type RequestFrontend } from "../types/request.types";
 import { ConfirmationModal } from "../components/organisms/ConfirmationModal";
+import { deleteRequest } from "../services/request.service";
 
 export function RequestsPage() {
   const { requests, loading, error, refresh } = useRequests();
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] =
     useState<RequestFrontend | null>(null);
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [requestToDelete, setRequestToDelete] =
-    useState<RequestFrontend | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
+
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const [isSubmittingDelete, setIsSubmittingDelete] = useState(false);
 
   const [showToast, setShowToast] = useState(false);
 
@@ -33,23 +34,23 @@ export function RequestsPage() {
   };
 
   const handleDeleteClick = (request: RequestFrontend) => {
-    setRequestToDelete(request);
-    setIsDeleteConfirmOpen(true);
+    setItemToDelete(request.id);
+    setIsConfirmOpen(true);
   };
 
   const confirmDelete = async () => {
-    if (!requestToDelete) return;
+    if (!itemToDelete) return;
 
     try {
-      setIsDeleting(true);
-      await deleteRequest(requestToDelete.id);
+      setIsSubmittingDelete(true);
+      await deleteRequest(itemToDelete);
+
+      setIsConfirmOpen(false);
       handleSuccess();
-      setIsDeleteConfirmOpen(false);
-      setRequestToDelete(null);
     } catch {
-      alert("Error al eliminar la solicitud.");
+      alert("Error al eliminar");
     } finally {
-      setIsDeleting(false);
+      setIsSubmittingDelete(false);
     }
   };
 
@@ -76,6 +77,7 @@ export function RequestsPage() {
         onDelete={handleDeleteClick}
       />
 
+
       <CreateRequestModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
@@ -89,15 +91,13 @@ export function RequestsPage() {
         onSuccess={handleSuccess}
       />
 
-      {isDeleteConfirmOpen && (
-        <ConfirmationModal
-          isOpen={true}
-          onClose={() => setIsDeleteConfirmOpen(false)}
-          onConfirm={confirmDelete}
-          actionType="delete"
-          isSubmitting={isDeleting}
-        />
-      )}
+      <ConfirmationModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={confirmDelete}
+        actionType="delete"
+        isSubmitting={isSubmittingDelete}
+      />
 
       <ToastNotification
         isVisible={showToast}

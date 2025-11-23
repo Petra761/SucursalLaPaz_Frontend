@@ -1,12 +1,16 @@
 import { type RequestStatus, StatusBadge } from "../atoms/StatusBadge";
 
+interface RequestsTableWidgetProps {
+  onCreate?: () => void;
+}
+
 interface RequestItem {
   code: string;
   subject: string;
   status: RequestStatus;
 }
 
-export function RequestsTableWidget() {
+export function RequestsTableWidget({ onCreate }: RequestsTableWidgetProps) {
   const requests: RequestItem[] = [
     { code: "#8329", subject: "Reembolso", status: "Aprobado" },
     { code: "#8328", subject: "Compra de material", status: "Pendiente" },
@@ -21,7 +25,11 @@ export function RequestsTableWidget() {
         <h2 className="text-dark-gray dark:text-gray-100 text-lg font-bold">
           Solicitudes Recientes
         </h2>
-        <button className="flex items-center justify-center h-10 px-4 rounded-lg bg-primary text-white text-sm font-bold gap-2 hover:bg-primary/90 transition-colors">
+
+        <button
+          onClick={onCreate}
+          className="flex items-center justify-center h-10 px-4 rounded-lg bg-primary text-white text-sm font-bold gap-2 hover:bg-primary/90 transition-colors"
+        >
           <span className="material-symbols-outlined text-xl">add</span>
           <span className="hidden sm:inline">Crear Nueva</span>
         </button>
@@ -29,27 +37,20 @@ export function RequestsTableWidget() {
 
       <div className="overflow-x-auto flex-1">
         <table className="w-full text-left text-sm">
-          <thead>
-            <tr className="text-gray-500 dark:text-gray-400 border-b border-border-color-light dark:border-border-color-dark">
-              <th className="py-3 px-2 font-medium">Código</th>
-              <th className="py-3 px-2 font-medium">Asunto</th>
-              <th className="py-3 px-2 font-medium text-right sm:text-left">
-                Estado
-              </th>
-            </tr>
-          </thead>
           <tbody className="divide-y divide-border-color-light dark:divide-border-color-dark text-dark-gray dark:text-gray-200">
             {requests.map((req) => (
-              <tr
-                key={req.code}
-                className="group hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
-              >
-                <td className="py-3 px-2 font-medium text-gray-600 dark:text-gray-300">
+              <tr key={req.code}>
+                <td className="py-3 px-2 font-medium text-primary">
                   {req.code}
                 </td>
                 <td className="py-3 px-2">{req.subject}</td>
-                <td className="py-3 px-2 text-right sm:text-left">
+                <td className="py-3 px-2">
                   <StatusBadge status={req.status} />
+                </td>
+                <td className="py-3 px-2 text-right">
+                  <button className="text-gray-500 hover:text-primary">
+                    <span className="material-symbols-outlined">more_vert</span>
+                  </button>
                 </td>
               </tr>
             ))}
