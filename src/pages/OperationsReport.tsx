@@ -15,6 +15,10 @@ export function OperationsReport() {
     setIsModalOpen(true);
   };
 
+  const handleRequestRestock = () => {
+    console.log("Abrir modal de reposición (Pendiente)");
+  };
+
   return (
     <div className="flex flex-col gap-6 relative">
       <div className="flex flex-wrap justify-between gap-4 items-center">
@@ -44,7 +48,10 @@ export function OperationsReport() {
         />
       </div>
 
-      <InventoryTable onViewDetail={handleViewDetail} />
+      <InventoryTable
+        onViewDetail={handleViewDetail}
+        onRequestRestock={handleRequestRestock}
+      />
 
       <ProductDetailModal
         isOpen={isModalOpen}

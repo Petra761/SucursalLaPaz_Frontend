@@ -11,9 +11,13 @@ export interface Product {
 
 interface InventoryTableProps {
   onViewDetail: (product: Product) => void;
+  onRequestRestock: () => void;
 }
 
-export function InventoryTable({ onViewDetail }: InventoryTableProps) {
+export function InventoryTable({
+  onViewDetail,
+  onRequestRestock,
+}: InventoryTableProps) {
   const products: Product[] = [
     {
       codigo: "0001",
@@ -26,7 +30,7 @@ export function InventoryTable({ onViewDetail }: InventoryTableProps) {
     {
       codigo: "0002",
       nombre: "Leche Entera UHT",
-      descripcion: "Leche entera de larga vida en bolsa",
+      descripcion: "Leche entera de larga vida",
       unidadMedida: "Litro",
       precio: 6.5,
       marca: "Pil",
@@ -67,11 +71,22 @@ export function InventoryTable({ onViewDetail }: InventoryTableProps) {
 
   return (
     <div className="rounded-xl border border-border-color-light dark:border-border-color-dark bg-white dark:bg-gray-900 overflow-hidden">
-      <div className="p-6 border-b border-border-color-light dark:border-border-color-dark">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-6 border-b border-border-color-light dark:border-border-color-dark">
         <h3 className="text-dark-gray dark:text-gray-100 text-lg font-bold">
           Inventario de Productos
         </h3>
+
+        <button
+          onClick={onRequestRestock}
+          className="flex items-center justify-center h-10 px-4 rounded-lg bg-primary text-white text-sm font-bold gap-2 hover:bg-primary/90 transition-colors shadow-sm"
+        >
+          <span className="material-symbols-outlined text-xl">
+            playlist_add
+          </span>
+          <span className="hidden sm:inline">Solicitar Reposición</span>
+        </button>
       </div>
+
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
@@ -126,7 +141,7 @@ function SimpleMenu({ onAction }: { onAction: () => void }) {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-1 w-40 bg-white dark:bg-gray-900 border border-border-color-light dark:border-border-color-dark rounded-lg shadow-xl z-50 p-1">
+        <div className="absolute right-0 top-full mt-1 w-40 bg-white dark:bg-gray-900 border border-border-color-light dark:border-border-color-dark rounded-lg shadow-xl z-50 p-1 animate-in fade-in zoom-in-95 duration-100">
           <button
             onClick={onAction}
             className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md w-full text-left transition-colors"
