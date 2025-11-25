@@ -1,22 +1,15 @@
 import type { ReactNode } from "react";
 import { Header } from "../components/organisms/Header";
-import { Sidebar, type ViewType } from "../components/organisms/Sidebar";
+import { Sidebar } from "../components/organisms/Sidebar";
 
 interface MainLayoutProps {
   children: ReactNode;
-  currentView: ViewType; // Nuevo prop
-  onNavigate: (view: ViewType) => void; // Nuevo prop
 }
 
-export function MainLayout({
-  children,
-  currentView,
-  onNavigate,
-}: MainLayoutProps) {
+export function MainLayout({ children }: MainLayoutProps) {
   return (
     <div className="flex h-screen w-full bg-background-light dark:bg-background-dark overflow-hidden font-display">
-      {/* Pasamos los props al Sidebar */}
-      <Sidebar currentView={currentView} onNavigate={onNavigate} />
+      <Sidebar />
 
       <main className="flex-1 flex flex-col h-screen overflow-hidden">
         <Header />
